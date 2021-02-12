@@ -1,0 +1,41 @@
+const { MessageEmbed } = require('discord.js');
+const data = require('quick.db');
+const kdb = new data.table("kullanici");
+exports.run = async (client, message, args) => {
+  
+//-------------------------------------------------------------------------------\\
+let izinli = ["356849332395180032", "695286573561806938"] 
+if(!izinli.includes(message.member.id))  return message.channel.send('Yarrraaaaa Bu Komut `\Emin`\ e ait bebeğim ')
+  
+  
+let member = message.guild.member(message.mentions.users.first() || message.guild.members.cache.get(args[0]));
+if(!member) return message.channel.send(new MessageEmbed().setDescription(`${message.author}, Bir kullanıcı etiketlemelisin.`).setAuthor(message.member.displayName, message.author.avatarURL({ dynamic: true })).setColor('0x800d0d').setTimestamp()).then(x => x.delete({timeout: 5000}));
+
+if (!member) {
+let sicil = kdb.delete(`kullanici.${member.id}.sicil`) || [];
+message.channel.send(new MessageEmbed().setColor('0x348f36').setDescription(`${message.author} Sana Ait Sicil Verilerini Sildim!`))
+}
+  
+if(member) {
+let sicil = kdb.delete(`kullanici.${member.id}.sicil`) || [];
+message.channel.send(new MessageEmbed().setColor('0x348f36').setDescription(`${member} Kullanıcısına Ait Sicil Verilerini Sildim!`))
+
+};
+  
+}
+  
+
+exports.conf = {
+  enabled: true,
+  guildOnly: true,
+  aliases: ["sicil-sıfırla"],
+  PermLevel: 0
+};
+
+ 
+
+exports.help = {
+  name: "sicil-sıfırla",
+  description: "",
+  usage: ""
+};
